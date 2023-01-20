@@ -4,15 +4,15 @@
 
 My project will be a program that allows users 
 to set the timing of songs in their library. 
-Timing refers to the speed in beats per minute (BPM), as well as time signatures. 
-This program
-will be useful for rhythm games, where making levels often
-requires knowing the BPM (and time signature) at any point in a song.
+Timing refers to the speed in beats per minute (BPM), 
+as well as a time signature (e.g 4/4). 
+This program will be useful for rhythm games, where making levels often
+requires knowing the BPM and time signature at any point in a song.
 
 This project is of interest to me because I enjoy making levels in rhythm games
 and find their timing editors to be lacking in functionality and ease of use,
 specifically for songs with multiple BPM sections or non-standard
-time signatures, typical in genres like jazz and math rock.
+time signatures, typical in some of my favourite genres such as jazz and math rock.
 
 
 
