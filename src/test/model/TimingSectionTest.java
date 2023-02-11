@@ -18,5 +18,7 @@ class TimingSectionTest {
 
     }
 
+    void beatLengthTest() {
 
+    }
 }

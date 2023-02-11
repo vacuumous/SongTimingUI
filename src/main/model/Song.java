@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 // Song represents a song with metadata (title, artist, etc.) and timing sections
 public class Song {
-    ArrayList<TimingSection> timingSections;
+    private ArrayList<TimingSection> timingSections;
     private String title;
     private String artist;
 
     public Song(String title, String artist) {
         this.title = title;
         this.artist = artist;
+        timingSections = new ArrayList<>();
     }
 
     public String getTitle() {
@@ -33,7 +34,7 @@ public class Song {
         return timingSections;
     }
 
-    // REQUIRES: ts != null
+    // REQUIRES: ts is not already in list
     // MODIFIES: this
     // EFFECTS: adds ts to the list of timing sections
     public void addSection(TimingSection ts) {
@@ -52,12 +53,17 @@ public class Song {
     // EFFECTS: return the timing section active at the given time
     public TimingSection find(double time) {
         TimingSection result = null;
-        for (int i = 0; i < timingSections.size(); i++) {
-            if (timingSections.get(i).getTime() <= time) {
-                result = timingSections.get(i);
+        for (TimingSection ts: timingSections) {
+            if (ts.getTime() > time) {
+                break;
             }
+            result = ts;
         }
         return result;
+    }
+
+    public TimeSignature findSig(double time) {
+        return this.find(time).getTimesig();
     }
 
 

@@ -50,12 +50,11 @@ public class TimingSection {
         return timesig;
     }
 
-    // TODO
     // REQUIRES: bpm > 0
     // MODIFIES:
     // EFFECTS: returns how long a single beat is in milliseconds
     public double beatLength() {
-        return 60000 / bpm;
+        return 60000 / this.getBPM();
     }
 
 
