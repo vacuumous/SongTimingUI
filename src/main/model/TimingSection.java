@@ -52,7 +52,7 @@ public class TimingSection {
 
     // REQUIRES: bpm > 0
     // MODIFIES:
-    // EFFECTS: returns how long a single beat is in milliseconds
+    // EFFECTS: returns length of a quarter note in milliseconds
     public double beatLength() {
         return 60000 / this.getBPM();
     }
