@@ -5,12 +5,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 
+import java.util.ArrayList;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class SongTest {
 
     Song s1;
     Song s2;
+    Song s3;
     TimingSection t1;
     TimingSection t2;
     TimingSection t3;
@@ -24,10 +27,14 @@ class SongTest {
         t3 = new TimingSection(10000, 180, sixFour);
         s1 = new Song("A", "aaa");
         s2 = new Song("B", "bbb");
-
+        s3 = new Song("C", "ccc");
         s1.addSection(t1);
         s1.addSection(t2);
         s1.addSection(t3);
+
+        s3.addSection(t3);
+        s3.addSection(t2);
+        s3.addSection(t1);
     }
 
 
@@ -50,7 +57,8 @@ class SongTest {
         assertEquals(sixFour, s1.findSig(5000000));
     }
 
-    @Test void setterTest() {
+    @Test
+    void setterTest() {
         assertEquals("A", s1.getTitle());
         assertEquals("aaa", s1.getArtist());
 
@@ -58,6 +66,14 @@ class SongTest {
         s1.setArtist("Chon");
         assertEquals("No Signal", s1.getTitle());
         assertEquals("Chon", s1.getArtist());
+    }
+
+    @Test
+    void sortTest() {
+        s3.sort();
+        assertEquals(t1, s3.getTimingSections().get(0));
+        assertEquals(t2, s3.getTimingSections().get(1));
+        assertEquals(t3, s3.getTimingSections().get(2));
     }
 
 }

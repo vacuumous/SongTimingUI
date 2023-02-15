@@ -2,7 +2,7 @@ package ui;
 
 import model.*;
 
-import java.util.Locale;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 // Console UI for timing editor
@@ -30,13 +30,16 @@ public class ConsoleApp {
             displayMenu();
             command = input.next();
             command = command.toLowerCase();
+
             if (command.equals("/q")) {
                 keepGoing = false;
+            } else {
+                processCommand(command);
             }
-            processCommand(command);
         }
 
         System.out.println("\nSee you next time");
+
     }
 
     // MODIFIES:
@@ -50,6 +53,7 @@ public class ConsoleApp {
         System.out.println("\t /add -> add timing section");
         System.out.println("\t /remove -> remove timing section");
         System.out.println("\t /ts -> view timing sections");
+        System.out.println("\t /bpm -> get BPM at certain time");
         System.out.println("\t /q -> quit");
 
 
@@ -77,60 +81,101 @@ public class ConsoleApp {
     // MODIFIES:
     // EFFECTS: performs function corresponding to command
     private void processCommand(String c) {
-        if (c.equals("t")) {
-            titleCommand();
-        }
-        if (c.equals("a")) {
-            artistCommand();
-        }
-        if (c.equals("add")) {
-            addSection();
-        }
-        if (c.equals("remove")) {
-            removeSection();
-        }
-        if (c.equals("ts")) {
-            viewSections();
+        switch (c) {
+            case "/t":
+                titleCommand();
+                break;
+            case "/a":
+                artistCommand();
+                break;
+            case "/add":
+                addSection();
+                break;
+            case "/remove":
+                removeSection();
+                break;
+            case "/ts":
+                viewSections();
+                break;
+            case "/bpm":
+                findBPM();
+                break;
+            default:
+                System.out.println("Invalid command");
+                break;
         }
     }
 
-    // TODO
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: changes title name if user wants to
     private void titleCommand() {
-
+        System.out.println("Current title: " + song.getTitle());
+        System.out.println("Enter new title or /q to cancel");
+        String title = input.next();
+        if (!title.equals("/q")) {
+            song.setTitle(title);
+        }
     }
 
-    // TODO
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: changes artist name if user wants to
     private void artistCommand() {
-
+        System.out.println("Current artist: " + song.getArtist());
+        System.out.println("Enter new artist or /q to cancel");
+        String artist = input.next();
+        if (!artist.equals("/q")) {
+            song.setArtist(artist);
+        }
     }
 
-    // TODO
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: add timing section from user input
     private void addSection() {
+        System.out.println("\nEnter timestamp of new timing section (ms)");
+        int timestamp = Integer.parseInt(input.next());
+        System.out.println("Enter bpm");
+        Double bpm = Double.parseDouble(input.next());
+        System.out.println("Enter time signature numerator");
+        int top = input.nextInt();
+        System.out.println("Enter time signature denominator");
+        int bot = input.nextInt();
+        song.addSection(new TimingSection(timestamp, bpm, new TimeSignature(top,bot)));
 
+        song.sort();
+        System.out.print("Timing section added!");
     }
 
-    // TODO
     // REQUIRES:
     // MODIFIES: this
     // EFFECTS: remove selected timing section
     private void removeSection() {
-
+        System.out.println("Enter time where section is active to remove");
+        int time = input.nextInt();
+        song.removeSection(song.find(time));
+        System.out.print("Timing section removed :(");
     }
 
-    // TODO
     // REQUIRES:
     // MODIFIES:
-    // EFFECTS:
+    // EFFECTS: prints each timing section
     private void viewSections() {
+        ArrayList<TimingSection> timingSections = song.getTimingSections();
+        for (TimingSection ts : timingSections) {
+            String sig = ts.getTimesig().getTop() + "/" + ts.getTimesig().getBot();
+            System.out.println("Timestamp: " + ts.getTime() + "  BPM: " + ts.getBPM() + "  Time signature: " + sig);
+        }
+    }
 
+    // REQUIRES: at least one timing section with timestamp < time
+    // MODIFIES:
+    // EFFECTS: prints bpm active at user specified time
+    private void findBPM() {
+        System.out.println("Enter time to find BPM for");
+        double time = input.nextDouble();
+        TimingSection ts = song.find(time);
+        System.out.println("BPM at " + time + ": " + ts.getBPM());
     }
 }

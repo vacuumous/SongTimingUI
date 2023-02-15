@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 // Song represents a song with metadata (title, artist, etc.) and timing sections
 public class Song {
@@ -48,7 +49,9 @@ public class Song {
         timingSections.remove(ts);
     }
 
-    // REQUIRES: time > 0, at least one timing section
+    // REQUIRES: time > 0
+    //           at least one timing section where timestamp <= time
+    //           timingSections is sorted in ascending order of timestamp
     // MODIFIES:
     // EFFECTS: return the timing section active at the given time
     public TimingSection find(double time) {
@@ -64,6 +67,13 @@ public class Song {
 
     public TimeSignature findSig(double time) {
         return this.find(time).getTimesig();
+    }
+
+    // REQUIRES: !timingSections.isEmpty()
+    // MODIFIES: this
+    // EFFECTS: sorts timing sections in ascending order of timestamp
+    public void sort() {
+        timingSections.sort(Comparator.comparing(TimingSection::getTime));
     }
 
 

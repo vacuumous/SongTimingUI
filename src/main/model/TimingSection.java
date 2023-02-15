@@ -1,10 +1,8 @@
 package model;
 
-import java.sql.Time;
 
 // TimingSection represents a section with an initial timestamp, bpm, and time signature (top / bot)
 public class TimingSection {
-
     private int timestamp;
     private double bpm;
     private TimeSignature timesig;
@@ -56,6 +54,8 @@ public class TimingSection {
     public double beatLength() {
         return 60000 / this.getBPM();
     }
+
+
 
 
 }
