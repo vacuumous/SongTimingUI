@@ -19,8 +19,6 @@ time signatures, typical in some of my favourite genres such as jazz and math ro
 ## User Stories
 - As a user, I want to be able to know the BPM of a song
 - As a user, I want to know the time signature at any point in a song
-- As a user, I want to be able to add these songs to a 
-library of timed songs
 - As a user, I want to be able to add multiple timing sections
 to songs that cannot be accurately described in one
 - As a user, I want to be able to select a song and see
