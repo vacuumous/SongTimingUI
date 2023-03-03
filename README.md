@@ -23,3 +23,7 @@ time signatures, typical in some of my favourite genres such as jazz and math ro
 to songs that cannot be accurately described in one
 - As a user, I want to be able to select a song and see
 all the timing sections in that song
+- As a user, I want to be able to save a song with all of its timing sections
+- As a user, I want to be able to load a song with all of its timing sections
+- As a user, when I start the application I want to be prompted to choose to load a song (or not, if I don't want to)
+- As a user, when I close the application I want to be prompted to save the song (or not, if I don't want to)
