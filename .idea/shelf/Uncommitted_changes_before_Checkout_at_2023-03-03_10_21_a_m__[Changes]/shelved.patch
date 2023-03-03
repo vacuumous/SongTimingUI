@@ -1,0 +1,37 @@
+Index: src/test/persistence/JsonReaderTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package persistence;\r\n\r\npublic class JsonReaderTest {\r\n}\r\n
+===================================================================
+diff --git a/src/test/persistence/JsonReaderTest.java b/src/test/persistence/JsonReaderTest.java
+--- a/src/test/persistence/JsonReaderTest.java	
++++ b/src/test/persistence/JsonReaderTest.java	
+@@ -1,4 +1,27 @@
+ package persistence;
+ 
+-public class JsonReaderTest {
++import org.junit.jupiter.api.Test;
++
++public class JsonReaderTest extends JsonTest {
++
++    @Test
++    void testNullFile() {
++
++    }
++
++    @Test
++    void testEmptySong() {
++
++    }
++
++    @Test
++    void testSimpleSong() {
++
++    }
++
++    @Test
++    void testComplexSong() {
++
++    }
++
+ }
