@@ -54,6 +54,7 @@ public class ConsoleApp {
         System.out.println("\t /remove -> remove timing section");
         System.out.println("\t /ts -> view timing sections");
         System.out.println("\t /bpm -> get BPM at certain time");
+        System.out.println("\t /sig -> get time signature at certain time");
         System.out.println("\t /q -> quit");
 
 
@@ -100,6 +101,8 @@ public class ConsoleApp {
             case "/bpm":
                 findBPM();
                 break;
+            case "/sig":
+                findSig();
             default:
                 System.out.println("Invalid command");
                 break;
@@ -177,5 +180,15 @@ public class ConsoleApp {
         double time = input.nextDouble();
         TimingSection ts = song.find(time);
         System.out.println("BPM at " + time + ": " + ts.getBPM());
+    }
+
+    // REQUIRES: at least one timing section with timestamp < time
+    // MODIFIES:
+    // EFFECTS: prints time signature active at user specified time
+    private void findSig() {
+        System.out.println("Enter time to find time signature for");
+        double time = input.nextDouble();
+        TimeSignature ts = song.find(time).getTimesig();
+        System.out.println("Time signature at " + time + ": " + ts.getTop() + " / " + ts.getBot());
     }
 }
