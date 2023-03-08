@@ -1,7 +1,11 @@
 package ui;
 
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,7 +29,7 @@ public class ConsoleApp {
         boolean keepGoing = true;
 
         System.out.println("Welcome!");
-        initialize();
+        start();
         while (keepGoing) {
             displayMenu();
             command = input.next();
@@ -52,15 +56,30 @@ public class ConsoleApp {
         System.out.println("\t /a -> artist");
         System.out.println("\t /add -> add timing section");
         System.out.println("\t /remove -> remove timing section");
-        System.out.println("\t /ts -> view timing sections");
+        System.out.println("\t /view -> view timing sections");
         System.out.println("\t /bpm -> get BPM at certain time");
         System.out.println("\t /sig -> get time signature at certain time");
+        System.out.println("\t /save -> save current song to JSON");
+        System.out.println("\t /load -> load song from JSON");
         System.out.println("\t /q -> quit");
 
 
     }
 
-    // REQUIRES:
+    // EFFECTS: asks user if they want to load from a file, loads it if yes, otherwise initialize new song
+    public void start() {
+        System.out.println("Would you like to load a previous song?");
+        boolean hasLoaded = false;
+        command = input.nextLine().toLowerCase();
+        if (command.equals("y") || command.equals("yes") || command.equals("load")) {
+            hasLoaded = load();
+        }
+        if (!hasLoaded) {
+            initialize();
+        }
+
+    }
+
     // MODIFIES: this
     // EFFECTS: prompt user for title and artist, create Song with those parameters
     private void initialize() {
@@ -95,7 +114,7 @@ public class ConsoleApp {
             case "/remove":
                 removeSection();
                 break;
-            case "/ts":
+            case "/view":
                 viewSections();
                 break;
             case "/bpm":
@@ -103,6 +122,12 @@ public class ConsoleApp {
                 break;
             case "/sig":
                 findSig();
+            case "/save":
+                save();
+                break;
+            case "/load":
+                load();
+                break;
             default:
                 System.out.println("Invalid command");
                 break;
@@ -140,7 +165,7 @@ public class ConsoleApp {
         System.out.println("\nEnter timestamp of new timing section (ms)");
         int timestamp = Integer.parseInt(input.next());
         System.out.println("Enter bpm");
-        Double bpm = Double.parseDouble(input.next());
+        double bpm = Double.parseDouble(input.next());
         System.out.println("Enter time signature numerator");
         int top = input.nextInt();
         System.out.println("Enter time signature denominator");
@@ -190,5 +215,44 @@ public class ConsoleApp {
         double time = input.nextDouble();
         TimeSignature ts = song.find(time).getTimesig();
         System.out.println("Time signature at " + time + ": " + ts.getTop() + " / " + ts.getBot());
+    }
+
+    // EFFECTS: saves current song to ./data/ with filename given by user
+    private void save() {
+        System.out.println("Enter a file name (exclude .json) to save to, /q to cancel:");
+        String fileName = input.next();
+        if (fileName.equalsIgnoreCase("/q")) {
+            System.out.println("Returning to main menu...");
+        } else {
+            try {
+                JsonWriter writer = new JsonWriter("./data/" + fileName + ".json");
+                writer.open();
+                writer.write(song);
+                writer.close();
+            } catch (FileNotFoundException f) {
+                System.err.println("Invalid file name, try again or cancel with /q");
+                save();
+            }
+        }
+    }
+
+    // EFFECTS: loads song from JSON with filename from ./data/
+    private boolean load() {
+        System.out.println("Enter a file name (exclude .json) to load from, /q to cancel");
+        String fileName = input.next();
+        if (fileName.equalsIgnoreCase("/q")) {
+            System.out.println("Cancelling loading...");
+            return false;
+        } else {
+            try {
+                JsonReader reader = new JsonReader("./data/" + fileName + ".json");
+                song = reader.read();
+                return true;
+            } catch (IOException e) {
+                System.err.println("Could not read file");
+                load();
+            }
+        }
+        return false;
     }
 }
