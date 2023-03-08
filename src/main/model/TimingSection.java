@@ -65,7 +65,8 @@ public class TimingSection implements Writable {
         JSONObject jsonSection = new JSONObject();
         jsonSection.put("offset", timestamp);
         jsonSection.put("BPM", bpm);
-        String signature = this.timesig.getTop() + " / " this.timesig.getBot();
+        String signature = this.timesig.getTop() + " / " + this.timesig.getBot();
+        jsonSection.put("Signature", signature);
         return jsonSection;
     }
 

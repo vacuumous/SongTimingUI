@@ -23,7 +23,7 @@ public class JsonReader {
 
 
     // EFFECTS: read the json at file path
-    //          throw IOException if can not read file properly
+    //          throws IOException if the file can not read file properly
     public Song read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
@@ -35,7 +35,7 @@ public class JsonReader {
     public String readFile(String path) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
-        try (Stream<String> stream = Files.lines( Paths.get(source), StandardCharsets.UTF_8)) {
+        try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s));
         }
 

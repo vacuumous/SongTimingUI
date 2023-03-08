@@ -1,4 +1,7 @@
 {
+
+  "title": "Madiba",
+  "artist": "Shaun Martin",
   "sections": [
     {
       "offset": 5,
@@ -20,7 +23,5 @@
       "BPM" : 100,
       "Signature": "6 / 8"
     }
-  ],
-  "title": "Madiba",
-  "artist": "Shaun Martin"
+  ]
 }

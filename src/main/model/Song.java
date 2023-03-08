@@ -13,6 +13,7 @@ public class Song implements Writable {
     private String title;
     private String artist;
 
+    // EFFECTS: Constructs song with title, artist, and empty timing sections
     public Song(String title, String artist) {
         this.title = title;
         this.artist = artist;
