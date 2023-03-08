@@ -100,6 +100,7 @@ public class ConsoleApp {
     // REQUIRES: command != null
     // MODIFIES:
     // EFFECTS: performs function corresponding to command
+    @SuppressWarnings("methodlength")
     private void processCommand(String c) {
         switch (c) {
             case "/t":
