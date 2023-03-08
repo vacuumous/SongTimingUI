@@ -1,8 +1,11 @@
 package model;
 
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 // TimingSection represents a section with an initial timestamp, bpm, and time signature (top / bot)
-public class TimingSection {
+public class TimingSection implements Writable {
     private int timestamp;
     private double bpm;
     private TimeSignature timesig;
@@ -56,6 +59,15 @@ public class TimingSection {
     }
 
 
+    @Override
+    // EFFECTS: returns JSON version of timing section
+    public JSONObject toJson() {
+        JSONObject jsonSection = new JSONObject();
+        jsonSection.put("offset", timestamp);
+        jsonSection.put("BPM", bpm);
+        String signature = this.timesig.getTop() + " / " this.timesig.getBot();
+        return jsonSection;
+    }
 
 
 }

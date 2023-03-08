@@ -1,8 +1,25 @@
 {
   "sections": [
-
-
-
+    {
+      "offset": 5,
+      "BPM": 180,
+      "Signature": "4 / 4"
+    },
+    {
+      "offset": 400,
+      "BPM" : 177.7,
+      "Signature": "4 / 4"
+    },
+    {
+      "offset": 581,
+      "BPM" : 100,
+      "Signature": "7 / 8"
+    },
+    {
+      "offset": 681,
+      "BPM" : 100,
+      "Signature": "6 / 8"
+    }
   ],
   "title": "Madiba",
   "artist": "Shaun Martin"

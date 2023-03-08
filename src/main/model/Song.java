@@ -1,10 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
 // Song represents a song with metadata (title, artist, etc.) and timing sections
-public class Song {
+public class Song implements Writable {
     private ArrayList<TimingSection> timingSections;
     private String title;
     private String artist;
@@ -77,4 +81,25 @@ public class Song {
     }
 
 
+    // EFFECTS: returns a JSON version of current song
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("sections", sectionsToJson());
+        json.put("title", title);
+        json.put("artist", artist);
+
+        return json;
+    }
+
+    // EFFECTS: returns timing sections in the song as a JSONArray
+    private JSONArray sectionsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (TimingSection ts : timingSections) {
+            jsonArray.put(ts.toJson());
+        }
+
+        return jsonArray;
+    }
 }
