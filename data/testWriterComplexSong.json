@@ -1,0 +1,16 @@
+{
+    "artist": "toe",
+    "title": "Goodbye",
+    "sections": [
+        {
+            "offset": 50,
+            "Signature": "4 / 4",
+            "BPM": 123
+        },
+        {
+            "offset": 100020,
+            "Signature": "3 / 4",
+            "BPM": 122.5
+        }
+    ]
+}
