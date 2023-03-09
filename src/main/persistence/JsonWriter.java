@@ -38,6 +38,7 @@ public class JsonWriter {
         writer.close();
     }
 
+    // EFFECTS: writes file with json data
     public void saveToFile(String json) {
         writer.print(json);
     }

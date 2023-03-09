@@ -70,10 +70,6 @@ public class Song implements Writable {
         return result;
     }
 
-    public TimeSignature findSig(double time) {
-        return this.find(time).getTimesig();
-    }
-
     // REQUIRES: !timingSections.isEmpty()
     // MODIFIES: this
     // EFFECTS: sorts timing sections in ascending order of timestamp
