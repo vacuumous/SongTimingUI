@@ -53,8 +53,8 @@ class SongTest {
 
     @Test
     void findSigTest() {
-        assertEquals(sevenEight, s1.findSig(8000));
-        assertEquals(sixFour, s1.findSig(5000000));
+        assertEquals(sevenEight, s1.find(8000).getTimesig());
+        assertEquals(sixFour, s1.find(5000000).getTimesig());
     }
 
     @Test
