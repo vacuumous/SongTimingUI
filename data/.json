@@ -1,0 +1,9 @@
+{
+    "artist": "Generic Artist",
+    "title": "Generic Song",
+    "sections": [{
+        "offset": 5,
+        "Signature": "4 / 4",
+        "BPM": 180
+    }]
+}
