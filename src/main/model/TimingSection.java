@@ -17,6 +17,12 @@ public class TimingSection implements Writable {
         timesig = ts;
     }
 
+    public TimingSection(int time, double bpm, int top, int bot) {
+        timestamp = time;
+        this.bpm = bpm;
+        timesig = new TimeSignature(top, bot);
+    }
+
 
     public void setTime(int time) {
         this.timestamp = time;

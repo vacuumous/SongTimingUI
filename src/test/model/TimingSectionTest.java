@@ -16,7 +16,7 @@ class TimingSectionTest {
     @BeforeEach
     void beforeEach() {
         t1 = new TimingSection(0, 120, fourFour);
-        t2 = new TimingSection(5000, 100, sevenEight);
+        t2 = new TimingSection(5000, 100, 7,8);
     }
 
     @Test

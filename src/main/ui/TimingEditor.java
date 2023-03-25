@@ -122,7 +122,7 @@ public class TimingEditor extends JFrame implements ActionListener {
             newSection();
         }
         if (e.getActionCommand() == AddRemove.RemoveSection.name()) {
-            deleteSection(new TimingSection(0,0,new TimeSignature(0,0)));
+            deleteSection(new TimingSection(0,0, 0, 0));
         }
     }
 
