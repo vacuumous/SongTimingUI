@@ -45,6 +45,7 @@ public class Song implements Writable {
     // EFFECTS: adds ts to the list of timing sections
     public void addSection(TimingSection ts) {
         timingSections.add(ts);
+        sort();
     }
 
     // REQUIRES: ts is in timingSections

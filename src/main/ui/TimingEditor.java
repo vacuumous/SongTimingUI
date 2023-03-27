@@ -4,33 +4,54 @@ import model.Song;
 import model.TimeSignature;
 import model.TimingSection;
 import persistence.JsonReader;
-import ui.tools.AddTool;
+import persistence.JsonWriter;
+import ui.tools.SectionEditor;
 
 import javax.swing.*;
-import javax.swing.border.Border;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
-public class TimingEditor extends JFrame implements ActionListener {
+import static javax.swing.JOptionPane.OK_OPTION;
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+
+public class TimingEditor extends JFrame implements ActionListener, ListSelectionListener {
 
     public static final int WIDTH = 1000;
     private static final int HEIGHT = 700;
     private Song song;
+    private DefaultListModel<Integer> timeList;
+    private JMenuItem save;
+    private JMenuItem load;
+    private JMenuItem changeMetadata;
+    private TimingSection selectedSection;
+    private JList<Integer> timeJList;
+    private JLabel titleLabel;
+    private JLabel artistLabel;
+    private JLabel timesigLabel;
+    private JLabel bpmLabel;
+    private JLabel offsetLabel;
+    private JPanel sectionDetails;
+
 
     private enum AddRemove {
         AddSection,
-        RemoveSection
+        EditSection,
+        ViewSection
     }
 
     public TimingEditor() {
         super("Timing Editor");
         initializeSong();
-        initializeList();
+        initializeMenu();
         initializeGraphics();
-        System.out.println(song.getTitle());
     }
 
     //EFFECTS: prompts user to set up a new song or load a previous one
@@ -45,9 +66,9 @@ public class TimingEditor extends JFrame implements ActionListener {
         }
     }
 
-    // EFFECTS: makes new song from user input with no timing sections yet
+    // EFFECTS: creates empty song
     private void newSong() {
-        System.out.println("new Song");
+        song = new Song("", "");
     }
 
     // REQUIRES: selected JSON file is in correct format
@@ -71,11 +92,74 @@ public class TimingEditor extends JFrame implements ActionListener {
         }
     }
 
+    // EFFECTS: saves current song
+    private void saveSong() {
+        JFileChooser browser = new JFileChooser("./data/");
+        browser.setDialogTitle("Save current song");
+        if (browser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
+            String saveToPath = browser.getSelectedFile().getPath();
+            JsonWriter writer = new JsonWriter(saveToPath);
+            try {
+                writer.open();
+                writer.write(song);
+                writer.close();
+            } catch (FileNotFoundException e) {
+                saveSong();
+            }
+        }
+    }
+
+    // EFFECTS: displays current title and artist
+    private void viewMetadata() {
+        JPanel metadata = new JPanel();
+        metadata.setLayout(new GridLayout(2,1));
+        add(metadata, BorderLayout.NORTH);
+        metadata.setVisible(true);
+
+        titleLabel = new JLabel("Title: " + song.getTitle(), JLabel.CENTER);
+        titleLabel.setVisible(true);
+        metadata.add(titleLabel);
+
+        artistLabel = new JLabel("Artist: " + song.getArtist(), JLabel.CENTER);
+        artistLabel.setVisible(true);
+        metadata.add(artistLabel);
+
+    }
+
+    // EFFECTS: shows details for currently selected section
+    private void viewSection() {
+        sectionDetails = new JPanel();
+        sectionDetails.setLayout(new FlowLayout());
+
+        offsetLabel = new JLabel("Offset: ");
+        sectionDetails.add(offsetLabel);
+
+        bpmLabel = new JLabel("BPM: ");
+        sectionDetails.add(bpmLabel);
+
+        timesigLabel = new JLabel("Time Signature: ");
+        sectionDetails.add(timesigLabel);
+
+        add(sectionDetails, BorderLayout.SOUTH);
+    }
+
+    // EFFECTS: updates view section details
+    private void updateViewSection() {
+        offsetLabel.setText("Offset: " + selectedSection.getTime());
+        bpmLabel.setText("BPM: " + selectedSection.getBPM());
+        TimeSignature ts = selectedSection.getTimesig();
+        timesigLabel.setText("Time Signature: " + ts.getTop() + "/" + ts.getBot());
+    }
+
     // EFFECTS: Sets up the layout for window
     private void initializeGraphics() {
-        setLayout(new BorderLayout());
+        setLayout(new BorderLayout(30, 30));
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
+        setSize(new Dimension(WIDTH, HEIGHT));
         createButtons();
+        viewMetadata();
+        viewSection();
+        initializeList();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -87,57 +171,135 @@ public class TimingEditor extends JFrame implements ActionListener {
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(0,1));
         buttonPanel.setSize(new Dimension(0,0));
-        add(buttonPanel, BorderLayout.SOUTH);
+        add(buttonPanel, BorderLayout.EAST);
 
         JButton addButton = new JButton("Add section");
         addButton.setActionCommand(AddRemove.AddSection.name());
         addButton.addActionListener(this);
 
-        JButton removeButton = new JButton("Remove section");
-        removeButton.addActionListener(this);
-        removeButton.setActionCommand(AddRemove.RemoveSection.name());
+        JButton editButton = new JButton("Edit section");
+        editButton.addActionListener(this);
+        editButton.setActionCommand(AddRemove.EditSection.name());
 
+        JButton viewButton = new JButton("View section details");
+        viewButton.addActionListener(this);
+        viewButton.setActionCommand(AddRemove.ViewSection.name());
+
+        buttonPanel.add(editButton);
         buttonPanel.add(addButton);
-        buttonPanel.add(removeButton);
+        buttonPanel.add(viewButton);
         buttonPanel.setVisible(true);
 
     }
 
-    // TODO
-    // Create a pane to view the list of timing sections
+    // Creates a pane to view the list of timing section offsets
     private void initializeList() {
-        DefaultListModel<String> list = new DefaultListModel<>();
-        list.addElement("A");
-        list.addElement("A");
-        JList<String> sectionList = new JList<>(list);
-        add(sectionList, BorderLayout.WEST);
-        sectionList.setSize(new Dimension(0,0));
-        sectionList.setVisible(true);
+        timeList = new DefaultListModel<>();
+        for (TimingSection ts : song.getTimingSections()) {
+            timeList.addElement(ts.getTime());
+        }
+        timeJList = new JList<>(timeList);
+        timeJList.setVisible(true);
+        timeJList.setLayoutOrientation(JList.VERTICAL);
+        timeJList.setSelectionMode(SINGLE_SELECTION);
+        timeJList.addListSelectionListener(this);
 
+        JScrollPane scrollableList = new JScrollPane();
+        scrollableList.setViewportView(timeJList);
+        scrollableList.setPreferredSize(new Dimension(100, 0));
+        add(timeJList, BorderLayout.WEST);
 
     }
 
+    // REQUIRES: ts != null
+    // MODIFIES: this
+    // EFFECTS: Edits an existing section and updates related components
+    private void editExistingSection(TimingSection ts) {
+        int sectionIndex = timeList.indexOf(ts.getTime());
+        JOptionPane editor = new SectionEditor(ts);
+        timeList.set(sectionIndex, ts.getTime());
+    }
+
+    // EFFECTS: Creates a new section and adds it to the list of sections
+    //          if new section has the same time as an already existing section, offset will be incremented by 1
+    private void makeNewSection() {
+
+        TimingSection newSection = new TimingSection(0,0,0,0);
+        JOptionPane editor = new SectionEditor(newSection);
+        while (timeList.indexOf(newSection.getTime()) != -1) {
+            newSection.setTime(newSection.getTime() + 1);
+        }
+        song.addSection(newSection);
+        timeList.addElement(newSection.getTime());
+
+    }
+
+    // EFFECTS: prompts user to change song title and/or artist
+    private void changeSong() {
+        JOptionPane metadata = new JOptionPane();
+        JTextField title = new JTextField(song.getTitle());
+        JTextField artist = new JTextField(song.getArtist());
+        Object[] fields = {
+                "Title:", title,
+                "Artist:", artist
+        };
+        JOptionPane.showConfirmDialog(null, fields, "Edit metadata", OK_OPTION);
+        song.setTitle(title.getText());
+        song.setArtist(artist.getText());
+        titleLabel.setText("Title:" + title.getText());
+        artist.setText("Artist:" + artist.getText());
+    }
+
+    // EFFECTS: catch-all for handling actions
     public void actionPerformed(ActionEvent e) {
+        if (timeJList.getSelectedIndex() != -1) {
+            int selectedTime = timeJList.getSelectedValue();
+            selectedSection = song.find(selectedTime);
+        }
         if (e.getActionCommand() == AddRemove.AddSection.name()) {
-            newSection();
+            makeNewSection();
         }
-        if (e.getActionCommand() == AddRemove.RemoveSection.name()) {
-            deleteSection(new TimingSection(0,0, 0, 0));
+        if (e.getActionCommand() == AddRemove.EditSection.name()) {
+            editExistingSection(selectedSection);
         }
+        if (e.getActionCommand() == AddRemove.ViewSection.name()) {
+            updateViewSection();
+        }
+        if (e.getSource() == save) {
+            saveSong();
+        }
+        if (e.getSource() == load) {
+            loadSong();
+        }
+        if (e.getSource() == changeMetadata) {
+            changeSong();
+        }
+        repaint();
     }
 
-    // TODO:
-    // MODIFIES: this
-    // EFFECTS: adds a new section to song
-    private void newSection() {
-
+    // EFFECTS: handles list selection events
+    @Override
+    public void valueChanged(ListSelectionEvent e) {
+        selectedSection = song.find(timeJList.getSelectedValue());
+        updateViewSection();
     }
 
-    // TODO:
-    // MODIFIES: this
-    // EFFECTS: remove selected section from song
-    private void deleteSection(TimingSection ts) {
 
+    // EFFECTS: creates menu with save and load options
+    private void initializeMenu() {
+        JMenu menu = new JMenu("File");
+        JMenuBar menuBar = new JMenuBar();
+        save = new JMenuItem("Save to...");
+        load = new JMenuItem("Load from...");
+        changeMetadata = new JMenuItem("Change song title/artist");
+        menu.add(save);
+        menu.add(load);
+        menu.add(changeMetadata);
+        save.addActionListener(this);
+        load.addActionListener(this);
+        changeMetadata.addActionListener(this);
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
     }
 
 }
