@@ -42,6 +42,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private JPanel sectionDetails;
     private final String addSection = "Add Section";
     private final String editSection = "Edit Section";
+    private final String removeSection = "Remove Section";
 
 
     // EFFECTS: constructs an editor to time a song in
@@ -209,12 +210,10 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         editButton.setActionCommand(editSection);
         buttonPanel.add(editButton);
 
-        /*
-        JButton viewButton = new JButton("View section details");
-        viewButton.addActionListener(this);
-        viewButton.setActionCommand(AddRemove.ViewSection.name());
-        buttonPanel.add(viewButton);
-        */
+        JButton removeButton = new JButton("Remove section");
+        removeButton.addActionListener(this);
+        removeButton.setActionCommand(removeSection);
+        buttonPanel.add(removeButton);
 
         buttonPanel.setVisible(true);
 
@@ -264,6 +263,12 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
 
     }
 
+    // EFFECTS: removes timing section from the list
+    private void removeSelectedSection(TimingSection ts) {
+        int sectionIndex = timeList.indexOf(ts);
+        timeList.remove(sectionIndex);
+    }
+
     // EFFECTS: prompts user to change song title and/or artist
     private void changeSong() {
         JTextField title = new JTextField(song.getTitle());
@@ -290,8 +295,8 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         if (e.getActionCommand().equals(editSection)) {
             editExistingSection(selectedSection);
         }
-        if (e.getActionCommand().equals("View Section")) {
-            updateViewSection();
+        if (e.getActionCommand().equals(removeSection)) {
+            removeSelectedSection(selectedSection);
         }
         if (e.getSource() == save) {
             saveSong();
@@ -308,8 +313,10 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     // EFFECTS: handles list selection events
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        selectedSection = timeJList.getSelectedValue();
-        updateViewSection();
+        if (timeJList.getSelectedValue() != null) {
+            selectedSection = timeJList.getSelectedValue();
+            updateViewSection();
+        }
     }
 
 }
