@@ -40,6 +40,8 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private JLabel bpmLabel;
     private JLabel offsetLabel;
     private JPanel sectionDetails;
+    private final String addSection = "Add Section";
+    private final String editSection = "Edit Section";
 
 
     // EFFECTS: constructs an editor to time a song in
@@ -198,13 +200,13 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         add(buttonPanel, BorderLayout.EAST);
 
         JButton addButton = new JButton("Add section");
-        addButton.setActionCommand(AddRemove.AddSection.name());
+        addButton.setActionCommand(addSection);
         addButton.addActionListener(this);
         buttonPanel.add(addButton);
 
         JButton editButton = new JButton("Edit section");
         editButton.addActionListener(this);
-        editButton.setActionCommand(AddRemove.EditSection.name());
+        editButton.setActionCommand(editSection);
         buttonPanel.add(editButton);
 
         /*
@@ -220,21 +222,13 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
 
     // Creates a pane to view the list of timing section offsets
     private void initializeList() {
-        /*
-        timeList = new DefaultListModel<>();
-        for (TimingSection ts : song.getTimingSections()) {
-            timeList.addElement(ts.getTime());
-        }
-         */
 
         timeList = new DefaultListModel<>();
         timeList.addAll(song.getTimingSections());
 
         timeJList = new JList<>(timeList);
-        timeJList.setCellRenderer(new TimingSectionListRenderer(timeJList));
+        timeJList.setCellRenderer(new TimingSectionListRenderer());
 
-
-        //timeJList = new JList<>(timeList);
         timeJList.setVisible(true);
         timeJList.setLayoutOrientation(JList.VERTICAL);
         timeJList.setSelectionMode(SINGLE_SELECTION);
@@ -290,13 +284,13 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         if (timeJList.getSelectedIndex() != -1) {
             selectedSection = timeJList.getSelectedValue();
         }
-        if (e.getActionCommand() == AddRemove.AddSection.name()) {
+        if (e.getActionCommand().equals(addSection)) {
             makeNewSection();
         }
-        if (e.getActionCommand() == AddRemove.EditSection.name()) {
+        if (e.getActionCommand().equals(editSection)) {
             editExistingSection(selectedSection);
         }
-        if (e.getActionCommand() == AddRemove.ViewSection.name()) {
+        if (e.getActionCommand().equals("View Section")) {
             updateViewSection();
         }
         if (e.getSource() == save) {
@@ -316,15 +310,6 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     public void valueChanged(ListSelectionEvent e) {
         selectedSection = timeJList.getSelectedValue();
         updateViewSection();
-    }
-
-
-
-
-    private enum AddRemove {
-        AddSection,
-        EditSection,
-        ViewSection
     }
 
 }

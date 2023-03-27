@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// A popup menu that allows manipulation of a timing section
 public class SectionEditor extends JOptionPane {
 
     private JTextField offset;
@@ -15,6 +16,8 @@ public class SectionEditor extends JOptionPane {
     private JTextField timesig;
     private TimingSection timingSection;
 
+    // MODIFIES: this
+    // EFFECTS: creates popup menu with field names
     public SectionEditor(TimingSection ts) {
         super("Edit selected section");
         setLayout(new GridLayout(3,1));

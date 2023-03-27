@@ -6,14 +6,12 @@ import model.TimingSection;
 import javax.swing.*;
 import java.awt.*;
 
+// Custom renderer to display TimingSection information in the JList
+// Uses example from ListCellRenderer documentation as starting point
 public class TimingSectionListRenderer implements ListCellRenderer<TimingSection> {
 
-    private JList<TimingSection> list;
 
-    public TimingSectionListRenderer(JList<TimingSection> list) {
-        this.list = list;
-    }
-
+    // EFFECTS: renders timing section as offset: x, BPM: y, time signature: a/b
     @Override
     public Component getListCellRendererComponent(JList<? extends TimingSection> list, TimingSection value, int index,
                                                   boolean isSelected, boolean cellHasFocus) {
