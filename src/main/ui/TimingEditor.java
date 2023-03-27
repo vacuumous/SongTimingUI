@@ -6,6 +6,7 @@ import model.TimingSection;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.tools.SectionEditor;
+import ui.tools.TimingSectionListRenderer;
 
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
@@ -27,12 +28,12 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     public static final int WIDTH = 1000;
     private static final int HEIGHT = 700;
     private Song song;
-    private DefaultListModel<Integer> timeList;
+    private DefaultListModel<TimingSection> timeList;
     private JMenuItem save;
     private JMenuItem load;
     private JMenuItem changeMetadata;
     private TimingSection selectedSection;
-    private JList<Integer> timeJList;
+    private JList<TimingSection> timeJList;
     private JLabel titleLabel;
     private JLabel artistLabel;
     private JLabel timesigLabel;
@@ -41,19 +42,24 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private JPanel sectionDetails;
 
 
-    private enum AddRemove {
-        AddSection,
-        EditSection,
-        ViewSection
-    }
-
+    // EFFECTS: constructs an editor to time a song in
     public TimingEditor() {
         super("Timing Editor");
+        initializeFields();
         initializeSong();
         initializeMenu();
         initializeGraphics();
     }
 
+    // MODIFIES: this
+    // EFFECTS: sets up fields that would otherwise be null upon use
+    private void initializeFields() {
+        song = new Song("","");
+        titleLabel = new JLabel("");
+        artistLabel = new JLabel("");
+    }
+
+    // MODIFIES: this
     //EFFECTS: prompts user to set up a new song or load a previous one
     private void initializeSong() {
         String msg = "Load existing song?";
@@ -66,9 +72,10 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         }
     }
 
-    // EFFECTS: creates empty song
+    // MODIFIES: this
+    // EFFECTS: prompts user to set artist and title for newly created song
     private void newSong() {
-        song = new Song("", "");
+        changeSong();
     }
 
     // REQUIRES: selected JSON file is in correct format
@@ -107,6 +114,23 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
                 saveSong();
             }
         }
+    }
+
+    // EFFECTS: creates menu with save and load options
+    private void initializeMenu() {
+        JMenu menu = new JMenu("File");
+        JMenuBar menuBar = new JMenuBar();
+        save = new JMenuItem("Save to...");
+        load = new JMenuItem("Load from...");
+        changeMetadata = new JMenuItem("Change song title/artist");
+        menu.add(save);
+        menu.add(load);
+        menu.add(changeMetadata);
+        save.addActionListener(this);
+        load.addActionListener(this);
+        changeMetadata.addActionListener(this);
+        menuBar.add(menu);
+        setJMenuBar(menuBar);
     }
 
     // EFFECTS: displays current title and artist
@@ -157,9 +181,9 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
         setSize(new Dimension(WIDTH, HEIGHT));
         createButtons();
-        viewMetadata();
         viewSection();
         initializeList();
+        viewMetadata();
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -176,38 +200,51 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         JButton addButton = new JButton("Add section");
         addButton.setActionCommand(AddRemove.AddSection.name());
         addButton.addActionListener(this);
+        buttonPanel.add(addButton);
 
         JButton editButton = new JButton("Edit section");
         editButton.addActionListener(this);
         editButton.setActionCommand(AddRemove.EditSection.name());
+        buttonPanel.add(editButton);
 
+        /*
         JButton viewButton = new JButton("View section details");
         viewButton.addActionListener(this);
         viewButton.setActionCommand(AddRemove.ViewSection.name());
-
-        buttonPanel.add(editButton);
-        buttonPanel.add(addButton);
         buttonPanel.add(viewButton);
+        */
+
         buttonPanel.setVisible(true);
 
     }
 
     // Creates a pane to view the list of timing section offsets
     private void initializeList() {
+        /*
         timeList = new DefaultListModel<>();
         for (TimingSection ts : song.getTimingSections()) {
             timeList.addElement(ts.getTime());
         }
+         */
+
+        timeList = new DefaultListModel<>();
+        timeList.addAll(song.getTimingSections());
+
         timeJList = new JList<>(timeList);
+        timeJList.setCellRenderer(new TimingSectionListRenderer(timeJList));
+
+
+        //timeJList = new JList<>(timeList);
         timeJList.setVisible(true);
         timeJList.setLayoutOrientation(JList.VERTICAL);
         timeJList.setSelectionMode(SINGLE_SELECTION);
         timeJList.addListSelectionListener(this);
 
+
         JScrollPane scrollableList = new JScrollPane();
         scrollableList.setViewportView(timeJList);
         scrollableList.setPreferredSize(new Dimension(100, 0));
-        add(timeJList, BorderLayout.WEST);
+        add(timeJList, BorderLayout.CENTER);
 
     }
 
@@ -215,28 +252,26 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     // MODIFIES: this
     // EFFECTS: Edits an existing section and updates related components
     private void editExistingSection(TimingSection ts) {
-        int sectionIndex = timeList.indexOf(ts.getTime());
+        int sectionIndex = timeList.indexOf(ts);
         JOptionPane editor = new SectionEditor(ts);
-        timeList.set(sectionIndex, ts.getTime());
+        timeList.set(sectionIndex, ts);
     }
 
     // EFFECTS: Creates a new section and adds it to the list of sections
     //          if new section has the same time as an already existing section, offset will be incremented by 1
     private void makeNewSection() {
-
         TimingSection newSection = new TimingSection(0,0,0,0);
         JOptionPane editor = new SectionEditor(newSection);
         while (timeList.indexOf(newSection.getTime()) != -1) {
             newSection.setTime(newSection.getTime() + 1);
         }
         song.addSection(newSection);
-        timeList.addElement(newSection.getTime());
+        timeList.addElement(newSection);
 
     }
 
     // EFFECTS: prompts user to change song title and/or artist
     private void changeSong() {
-        JOptionPane metadata = new JOptionPane();
         JTextField title = new JTextField(song.getTitle());
         JTextField artist = new JTextField(song.getArtist());
         Object[] fields = {
@@ -247,14 +282,13 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         song.setTitle(title.getText());
         song.setArtist(artist.getText());
         titleLabel.setText("Title:" + title.getText());
-        artist.setText("Artist:" + artist.getText());
+        artistLabel.setText("Artist:" + artist.getText());
     }
 
     // EFFECTS: catch-all for handling actions
     public void actionPerformed(ActionEvent e) {
         if (timeJList.getSelectedIndex() != -1) {
-            int selectedTime = timeJList.getSelectedValue();
-            selectedSection = song.find(selectedTime);
+            selectedSection = timeJList.getSelectedValue();
         }
         if (e.getActionCommand() == AddRemove.AddSection.name()) {
             makeNewSection();
@@ -280,26 +314,17 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     // EFFECTS: handles list selection events
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        selectedSection = song.find(timeJList.getSelectedValue());
+        selectedSection = timeJList.getSelectedValue();
         updateViewSection();
     }
 
 
-    // EFFECTS: creates menu with save and load options
-    private void initializeMenu() {
-        JMenu menu = new JMenu("File");
-        JMenuBar menuBar = new JMenuBar();
-        save = new JMenuItem("Save to...");
-        load = new JMenuItem("Load from...");
-        changeMetadata = new JMenuItem("Change song title/artist");
-        menu.add(save);
-        menu.add(load);
-        menu.add(changeMetadata);
-        save.addActionListener(this);
-        load.addActionListener(this);
-        changeMetadata.addActionListener(this);
-        menuBar.add(menu);
-        setJMenuBar(menuBar);
+
+
+    private enum AddRemove {
+        AddSection,
+        EditSection,
+        ViewSection
     }
 
 }
