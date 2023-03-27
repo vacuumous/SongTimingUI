@@ -27,3 +27,10 @@ all the timing sections in that song
 - As a user, I want to be able to load a song with all of its timing sections
 - As a user, when I start the application I want to be prompted to choose to load a song (or not, if I don't want to)
 - As a user, when I close the application I want to be prompted to save the song (or not, if I don't want to)
+
+## Instructions for Grader:
+- You can add Xs to Y by pressing the "Add Section" button and inputting the parameters.
+- You can edit any X in Y by first selecting a timing section from the list and then pressing the "Edit Section" button
+- You can locate my visual component by...
+- You can save the state of my application by pressing the "File" menu button at the top of the screen and clicking "Save to..."
+- You can reload the state of my application by either doing so when prompted on launch, or pressing "Load from..." in the "File" menu
