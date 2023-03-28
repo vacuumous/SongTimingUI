@@ -99,6 +99,10 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
             }
 
         }
+        if (timeList != null) {
+            timeList.removeAllElements();
+            timeList.addAll(song.getTimingSections());
+        }
     }
 
     // EFFECTS: saves current song
@@ -242,6 +246,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
 
         JScrollPane scrollableList = new JScrollPane();
         scrollableList.setViewportView(timeJList);
+        scrollableList.setPreferredSize(new Dimension(300,0));
         add(scrollableList, BorderLayout.WEST);
 
     }

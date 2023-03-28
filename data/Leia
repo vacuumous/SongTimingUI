@@ -1,0 +1,66 @@
+{
+    "artist": "Nico Nico Chorus",
+    "title": "Leia",
+    "sections": [
+        {
+            "offset": 53959,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 60590,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 62800,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 70378,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 83009,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 110798,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 129745,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 155008,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 159744,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 170165,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 219428,
+            "Signature": "5 / 4",
+            "BPM": 190
+        },
+        {
+            "offset": 282585,
+            "Signature": "5 / 4",
+            "BPM": 190
+        }
+    ]
+}
