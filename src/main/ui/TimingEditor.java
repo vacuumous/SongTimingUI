@@ -25,8 +25,8 @@ import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
 public class TimingEditor extends JFrame implements ActionListener, ListSelectionListener {
 
-    public static final int WIDTH = 1000;
-    private static final int HEIGHT = 700;
+    public static final int WIDTH = 800;
+    private static final int HEIGHT = 675;
     private Song song;
     private DefaultListModel<TimingSection> timeList;
     private JMenuItem save;
@@ -43,11 +43,16 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private final String addSection = "Add Section";
     private final String editSection = "Edit Section";
     private final String removeSection = "Remove Section";
+    private ImageIcon background;
 
 
     // EFFECTS: constructs an editor to time a song in
     public TimingEditor() {
         super("Timing Editor");
+
+        background = new ImageIcon("./data/Garden.jpg");
+        setContentPane(new JLabel(background));
+
         initializeFields();
         initializeSong();
         initializeMenu();
@@ -71,14 +76,8 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         if (result == JOptionPane.YES_OPTION) {
             loadSong();
         } else {
-            newSong();
+            changeSong();
         }
-    }
-
-    // MODIFIES: this
-    // EFFECTS: prompts user to set artist and title for newly created song
-    private void newSong() {
-        changeSong();
     }
 
     // REQUIRES: selected JSON file is in correct format
@@ -88,7 +87,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         JFileChooser browser = new JFileChooser("./data/");
         int select = browser.showOpenDialog(this);
         if (select == JFileChooser.CANCEL_OPTION) {
-            newSong();
+            changeSong();
         }
         if (select == JFileChooser.APPROVE_OPTION) {
             String filePath = browser.getSelectedFile().getPath();
@@ -182,14 +181,21 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private void initializeGraphics() {
         setLayout(new BorderLayout(30, 30));
         setMinimumSize(new Dimension(WIDTH, HEIGHT));
-        setSize(new Dimension(WIDTH, HEIGHT));
+
+
+
         createButtons();
         viewSection();
         initializeList();
         viewMetadata();
+
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+
+
 
     }
 
@@ -236,8 +242,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
 
         JScrollPane scrollableList = new JScrollPane();
         scrollableList.setViewportView(timeJList);
-        scrollableList.setPreferredSize(new Dimension(100, 0));
-        add(timeJList, BorderLayout.CENTER);
+        add(scrollableList, BorderLayout.WEST);
 
     }
 
@@ -255,9 +260,14 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private void makeNewSection() {
         TimingSection newSection = new TimingSection(0,0,0,0);
         JOptionPane editor = new SectionEditor(newSection);
-        while (timeList.indexOf(newSection.getTime()) != -1) {
+        ArrayList<Integer> offsetList = new ArrayList<>();
+        for (TimingSection ts : song.getTimingSections()) {
+            offsetList.add(ts.getTime());
+        }
+        while (offsetList.contains(newSection.getTime())) {
             newSection.setTime(newSection.getTime() + 1);
         }
+
         song.addSection(newSection);
         timeList.addElement(newSection);
 
@@ -318,5 +328,6 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
             updateViewSection();
         }
     }
+
 
 }
