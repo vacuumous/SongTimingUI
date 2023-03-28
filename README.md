@@ -29,8 +29,8 @@ all the timing sections in that song
 - As a user, when I close the application I want to be prompted to save the song (or not, if I don't want to)
 
 ## Instructions for Grader:
-- You can add Xs to Y by pressing the "Add Section" button and inputting the parameters.
-- You can edit any X in Y by first selecting a timing section from the list and then pressing the "Edit Section" button
-- You can locate my visual component by...
+- You can add timing sections to a song by pressing the "Add Section" button and inputting the parameters.
+- You can edit any timing section in a song by first selecting a timing section from the list and then pressing the "Edit Section" button
+- The visual component of the program is the background image. It is the painting "Garden of Death" by Hugo Simberg. The painting is in public domain.
 - You can save the state of my application by pressing the "File" menu button at the top of the screen and clicking "Save to..."
 - You can reload the state of my application by either doing so when prompted on launch, or pressing "Load from..." in the "File" menu
