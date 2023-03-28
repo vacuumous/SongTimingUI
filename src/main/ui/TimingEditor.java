@@ -101,7 +101,9 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         }
         if (timeList != null) {
             timeList.removeAllElements();
-            timeList.addAll(song.getTimingSections());
+            for (TimingSection ts : song.getTimingSections()) {
+                timeList.addElement(ts);
+            }
         }
     }
 
@@ -231,9 +233,10 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
 
     // Creates a pane to view the list of timing section offsets
     private void initializeList() {
-
         timeList = new DefaultListModel<>();
-        timeList.addAll(song.getTimingSections());
+        for (TimingSection ts : song.getTimingSections()) {
+            timeList.addElement(ts);
+        }
 
         timeJList = new JList<>(timeList);
         timeJList.setCellRenderer(new TimingSectionListRenderer());
