@@ -23,6 +23,8 @@ import java.util.HashMap;
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 
+// A GUI to time songs.
+// Used SimpleDrawingPlayer as a starting point
 public class TimingEditor extends JFrame implements ActionListener, ListSelectionListener {
 
     public static final int WIDTH = 800;
