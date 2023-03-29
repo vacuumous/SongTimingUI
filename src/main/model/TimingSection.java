@@ -57,6 +57,16 @@ public class TimingSection implements Writable {
         return timesig;
     }
 
+    // REQUIRES: newOffset, newBPM, newTop, and newBot >= 0
+    // MODIFIES: this
+    // EFFECTS: edits provided timing section with new values
+    public void editSection(int newOffset, double newBPM, int newTop, int newBot) {
+        setTime(newOffset);
+        setBPM(newBPM);
+        setTimeSig(newTop, newBot);
+    }
+
+
     // REQUIRES: bpm > 0
     // MODIFIES:
     // EFFECTS: returns length of a quarter note in milliseconds

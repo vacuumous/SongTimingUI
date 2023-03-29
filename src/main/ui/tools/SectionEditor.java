@@ -47,8 +47,6 @@ public class SectionEditor extends JOptionPane {
         String[] split = newSignature.split("/", 0);
         int newTop = Integer.parseInt(split[0]);
         int newBot = Integer.parseInt(split[1]);
-        timingSection.setTime(newOffset);
-        timingSection.setBPM(newBPM);
-        timingSection.setTimeSig(newTop, newBot);
+        timingSection.editSection(newOffset, newBPM, newTop, newBot);
     }
 }

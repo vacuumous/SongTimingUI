@@ -47,4 +47,13 @@ class TimingSectionTest {
         assertEquals(7, t1.getTimesig().getTop());
         assertEquals(8, t1.getTimesig().getBot());
     }
+    @Test
+    void editTest() {
+        TimingSection temp = t1;
+        t1.editSection(50, 200.0, 4, 8);
+        assertEquals(temp, t1);
+        assertEquals(200.0, t1.getBPM());
+        assertEquals(4, t1.getTimesig().getTop());
+        assertEquals(8, t1.getTimesig().getBot());
+    }
 }

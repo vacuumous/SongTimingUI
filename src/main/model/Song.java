@@ -55,6 +55,8 @@ public class Song implements Writable {
         timingSections.remove(ts);
     }
 
+
+
     // REQUIRES: time > 0
     //           at least one timing section where timestamp <= time
     //           timingSections is sorted in ascending order of timestamp
