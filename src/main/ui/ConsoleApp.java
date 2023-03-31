@@ -43,6 +43,9 @@ public class ConsoleApp {
         }
 
         System.out.println("\nSee you next time");
+        for (Event e : EventLog.getInstance()) {
+            System.out.println(e.toString());
+        }
 
     }
 

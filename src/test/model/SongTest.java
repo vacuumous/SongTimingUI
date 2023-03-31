@@ -67,6 +67,13 @@ class SongTest {
         assertEquals("No Signal", s1.getTitle());
         assertEquals("Chon", s1.getArtist());
     }
+    @Test
+    void editTest() {
+        s1.editSection(t1, 50, 100, 4, 4);
+        assertEquals(t1, s1.find(50));
+        assertEquals(50, t1.getTime());
+        assertEquals(100, t1.getBPM());
+    }
 
 
 

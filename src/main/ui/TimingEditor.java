@@ -261,7 +261,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     // EFFECTS: Edits an existing section and updates related components
     private void editExistingSection(TimingSection ts) {
         int sectionIndex = timeList.indexOf(ts);
-        JOptionPane editor = new SectionEditor(ts);
+        JOptionPane editor = new SectionEditor(song);
         timeList.set(sectionIndex, ts);
     }
 
@@ -269,7 +269,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     //          if new section has the same time as an already existing section, offset will be incremented by 1
     private void makeNewSection() {
         TimingSection newSection = new TimingSection(0,0,0,0);
-        JOptionPane editor = new SectionEditor(newSection);
+        JOptionPane editor = new SectionEditor(song);
         ArrayList<Integer> offsetList = new ArrayList<>();
         for (TimingSection ts : song.getTimingSections()) {
             offsetList.add(ts.getTime());

@@ -1,5 +1,6 @@
 package ui.tools;
 
+import model.Song;
 import model.TimeSignature;
 import model.TimingSection;
 
@@ -15,14 +16,15 @@ public class SectionEditor extends JOptionPane {
     private JTextField bpm;
     private JTextField timesig;
     private TimingSection timingSection;
+    private Song song;
 
     // MODIFIES: this
     // EFFECTS: creates popup menu with field names
-    public SectionEditor(TimingSection ts) {
+    public SectionEditor(Song song) {
         super("Edit selected section");
         setLayout(new GridLayout(3,1));
-        timingSection = ts;
         initializeFields();
+        this.song = song;
     }
 
     // REQUIRES: offset is an integer and > 0
@@ -47,6 +49,6 @@ public class SectionEditor extends JOptionPane {
         String[] split = newSignature.split("/", 0);
         int newTop = Integer.parseInt(split[0]);
         int newBot = Integer.parseInt(split[1]);
-        timingSection.editSection(newOffset, newBPM, newTop, newBot);
+        song.editSection(timingSection, newOffset, newBPM, newTop, newBot);
     }
 }

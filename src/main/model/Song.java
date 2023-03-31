@@ -12,12 +12,14 @@ public class Song implements Writable {
     private ArrayList<TimingSection> timingSections;
     private String title;
     private String artist;
+    private EventLog eventLog;
 
     // EFFECTS: Constructs song with title, artist, and empty timing sections
     public Song(String title, String artist) {
         this.title = title;
         this.artist = artist;
         timingSections = new ArrayList<>();
+        eventLog = EventLog.getInstance();
     }
 
     public String getTitle() {
@@ -46,6 +48,7 @@ public class Song implements Writable {
     public void addSection(TimingSection ts) {
         timingSections.add(ts);
         sort();
+        eventLog.logEvent(new Event("Added timing section at " + ts.getTime()));
     }
 
     // REQUIRES: ts is in timingSections
@@ -53,6 +56,16 @@ public class Song implements Writable {
     // EFFECTS: removes given section from the list
     public void removeSection(TimingSection ts) {
         timingSections.remove(ts);
+        eventLog.logEvent(new Event("Removed timing section at " + ts.getTime()));
+    }
+
+    // REQUIRES: ts != null
+    // MODIFIES: ts
+    // EFFECTS: updates timing section with new values
+    public void editSection(TimingSection ts, int newOffset, double newBPM, int newTop, int newBot) {
+        int time = ts.getTime();
+        ts.editSection(newOffset, newBPM, newTop, newBot);
+        eventLog.logEvent(new Event("Edited timing section at " + time));
     }
 
 
