@@ -5,6 +5,7 @@ import model.TimeSignature;
 import model.TimingSection;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import ui.tools.EditorWindowListener;
 import ui.tools.SectionEditor;
 import ui.tools.TimingSectionListRenderer;
 
@@ -14,6 +15,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -59,6 +62,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         initializeSong();
         initializeMenu();
         initializeGraphics();
+        addWindowListener(new EditorWindowListener());
     }
 
     // MODIFIES: this
@@ -261,7 +265,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     // EFFECTS: Edits an existing section and updates related components
     private void editExistingSection(TimingSection ts) {
         int sectionIndex = timeList.indexOf(ts);
-        JOptionPane editor = new SectionEditor(song);
+        JOptionPane editor = new SectionEditor(song, ts);
         timeList.set(sectionIndex, ts);
     }
 
@@ -338,6 +342,5 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
             updateViewSection();
         }
     }
-
 
 }
