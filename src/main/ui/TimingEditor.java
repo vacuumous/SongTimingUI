@@ -272,18 +272,12 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     // EFFECTS: Creates a new section and adds it to the list of sections
     //          if new section has the same time as an already existing section, offset will be incremented by 1
     private void makeNewSection() {
-        TimingSection newSection = new TimingSection(0,0,0,0);
         JOptionPane editor = new SectionEditor(song);
-        ArrayList<Integer> offsetList = new ArrayList<>();
         for (TimingSection ts : song.getTimingSections()) {
-            offsetList.add(ts.getTime());
+            if (!timeList.contains(ts)) {
+                timeList.addElement(ts);
+            }
         }
-        while (offsetList.contains(newSection.getTime())) {
-            newSection.setTime(newSection.getTime() + 1);
-        }
-
-        song.addSection(newSection);
-        timeList.addElement(newSection);
 
     }
 
