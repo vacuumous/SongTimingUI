@@ -285,6 +285,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
     private void removeSelectedSection(TimingSection ts) {
         int sectionIndex = timeList.indexOf(ts);
         timeList.remove(sectionIndex);
+        song.removeSection(ts);
     }
 
     // EFFECTS: prompts user to change song title and/or artist
