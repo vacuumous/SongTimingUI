@@ -36,12 +36,12 @@ all the timing sections in that song
 - You can reload the state of my application by either doing so when prompted on launch, or pressing "Load from..." in the "File" menu
 
 ## Phase 4: Task 2
-Tue Apr 11 17:01:06 PDT 2023
-Added timing section at 5000
-Tue Apr 11 17:01:10 PDT 2023
-Added timing section at 2000
-Tue Apr 11 17:01:16 PDT 2023
-Edited timing section at 2000
+Tue Apr 11 17:01:06 PDT 2023  
+Added timing section at 5000  
+Tue Apr 11 17:01:10 PDT 2023  
+Added timing section at 2000  
+Tue Apr 11 17:01:16 PDT 2023  
+Edited timing section at 2000  
 
 
 
