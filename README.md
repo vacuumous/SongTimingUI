@@ -43,6 +43,17 @@ Added timing section at 2000
 Tue Apr 11 17:01:16 PDT 2023  
 Edited timing section at 2000  
 
+## Phase 4: Task 3
+A possible refactoring I would do is to simply have TimeSignature as a field in TimingSection. This is because it serves no 
+purpose outside the class, and is simply storing two related integers. This is just as easily implemented within the TimingSection
+class. There are no methods other than getters and setters in TimeSignature, so it is almost completely redundant.  
+While this does technically reduce cohesion in the design, I think that the cohesion is trivial. There aren't any classes that
+use TimeSignature outside of TimingSection, and none of the functions in TimeSignature are significant. This wouldn't be the case
+if TimeSignature had any useful functions besides getters and setters, or if time signatures weren't exclusively used in TimingSection.
+The current implementation is just redundant and makes code unnecessarily complex (e.g I need to do song.timingSections.get(0).getTimeSignature().getTop();
+instead of song.timingSections.get(0).getTop()).
+
+
 
 
 
