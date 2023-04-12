@@ -15,13 +15,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 
 import static javax.swing.JOptionPane.OK_OPTION;
 import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
@@ -278,7 +273,6 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
                 timeList.addElement(ts);
             }
         }
-
     }
 
     // EFFECTS: removes timing section from the list
@@ -303,7 +297,7 @@ public class TimingEditor extends JFrame implements ActionListener, ListSelectio
         artistLabel.setText("Artist:" + artist.getText());
     }
 
-    // EFFECTS: catch-all for handling actions
+    // EFFECTS: catch-all for handling buttons and the file menu
     public void actionPerformed(ActionEvent e) {
         if (timeJList.getSelectedIndex() != -1) {
             selectedSection = timeJList.getSelectedValue();
